@@ -1,7 +1,7 @@
 import pygame
 
 from assets.player import Player
-from assets.state import Poison
+from assets.state import Poison, Burn
 from assets.logic import Logic
 
 
@@ -31,7 +31,7 @@ class Game:
 
         # state
         self.poison = Poison(50, 50, self.original)
-
+        self.burn = Burn( 50, 50, self.original )
         # logic
         self.logic = Logic()
 
