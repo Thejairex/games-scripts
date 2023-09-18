@@ -7,8 +7,8 @@ class Player():
         self.speed = 4
         self.rect = pygame.Rect(400, 300, width, height)
         self.color = (255,255,255)
-        self.state = ""
         
+        self.state = []
         self.hp = 50
 
     def movement(self, keys):
@@ -37,6 +37,8 @@ class Player():
             self.rect.top = 0
         elif self.rect.bottom > self.size[1]:
             self.rect.bottom = self.size[1]
+            
+
             
     def draw(self, screen: pygame.Surface):
         self.limit_player()

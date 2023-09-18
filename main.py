@@ -1,9 +1,9 @@
 import pygame
 
-from assets.player import Player
-from assets.state import Poison, Burn
-from assets.logic import Logic
-
+from entities.player import Player
+from utils.state import Poison, Burn, Wet
+from utils.logic import Logic
+import threading
 
 class Game:
     def __init__(self) -> None:
@@ -32,8 +32,10 @@ class Game:
         # state
         self.poison = Poison(50, 50, self.original)
         self.burn = Burn( 50, 50, self.original )
+        self.humid = Wet(50, 50, self.original )
+        
         # logic
-        self.logic = Logic()
+        # self.logic = Logic()
 
     def run(self):
         self.inGame = True
@@ -60,16 +62,14 @@ class Game:
                 self.inGame = False
 
             # Logic
-            if self.player.rect.colliderect(self.poison.rect):
-                if not self.player.state:
-                    print("envenenado. ")
-                    self.player.state = self.poison.state
-                    self.player.color = self.poison.color
-
-            if self.player.state == "veneno":
-                if self.logic.decrease_hp(self.player, self.poison.dagame, self.poison.duration):
-                    self.player.state = ""
-                    self.player.color = (255, 255, 255)
+            self.poison.effect(self.player)
+            self.burn.effect(self.player)
+            self.humid.effect(self.player)
+                
+            # if self.humid.state in self.player.state:
+            #     if self.logic.decrease_speed(self.player, self.humid.speed, self.humid.duration):
+            #         self.player.state.remove(self.humid.state)
+            #         self.player.color = (255,255,255)
 
             # frame
             self.screen.fill((0, 0, 0))
@@ -86,6 +86,8 @@ class Game:
                 ))
 
             self.poison.draw(self.screen)
+            self.burn.draw(self.screen)
+            self.humid.draw(self.screen)
 
             pygame.display.flip()
             self.clock.tick(self.fps)
